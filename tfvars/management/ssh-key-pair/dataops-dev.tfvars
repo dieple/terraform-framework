@@ -1,0 +1,6 @@
+key_name              = "app-ssh"
+ssh_public_key_path   = "../../../generated-ssh-key-pairs"
+generate_ssh_key      = "true"
+private_key_extension = ".pem"
+public_key_extension  = ".pub"
+ssh_key_algorithm     = "RSA"
