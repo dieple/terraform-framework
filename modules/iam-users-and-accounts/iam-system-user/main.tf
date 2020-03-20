@@ -14,7 +14,7 @@ resource "aws_iam_access_key" "default" {
 
 resource "aws_iam_user_policy" "default" {
   count  = var.enabled ? 1 : 0
-  name   = "${aws_iam_user.default.name}-policy"
+  name   = "${aws_iam_user.default.[0].name}-policy"
   user   = aws_iam_user.default.name
   policy = var.policy
 }
