@@ -9,8 +9,7 @@ data "aws_iam_policy_document" "default" {
 }
 
 module "s3_user" {
-//  source        = "git::https://git@github.com/dieple/terraform-modules-012x.git//iam-system-user?ref=tags/v0.0.2"
-  source        = "../../../modules/iam-users-and-accounts/iam-system-user"
+  source        = "git::https://git@github.com/dieple/terraform-framework.git//modules/iam-users-and-accounts/iam-system-user?ref=tags/v0.0.3"
   enabled       = var.enabled
   user_id       = var.name
   pgp_key       = var.pgp_key
