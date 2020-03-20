@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "default" {
+  count         = var.enabled ? 1 : 0
   bucket        = var.name
   acl           = var.acl
   region        = var.region
@@ -7,6 +8,22 @@ resource "aws_s3_bucket" "default" {
 
   versioning {
     enabled = var.versioning_enabled
+  }
+
+  lifecycle_rule {
+    id      = var.name
+    enabled = var.lifecycle_rule_enabled
+    prefix  = var.prefix
+    tags    = var.tags
+
+    noncurrent_version_transition {
+      days          = var.noncurrent_version_transition_days
+      storage_class = "GLACIER"
+    }
+
+    noncurrent_version_expiration {
+      days = var.noncurrent_version_expiration_days
+    }
   }
 
   # https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html
@@ -24,14 +41,13 @@ resource "aws_s3_bucket" "default" {
 }
 
 module "s3_user" {
-//  source       = "git::https://git@github.com/dieple/terraform-modules-012x.git//iam-s3-user?ref=tags/v0.0.2"
-  source       = "../../../modules/iam-users-and-accounts/iam-s3-user"
-  enabled      = var.user_enabled
+  source       = "git::https://git@github.com/dieple/terraform-framework.git//modules/iam-users-and-accounts/iam-s3-user?ref=tags/v0.0.3"
+  enabled      = var.enabled && var.user_enabled ? true : false
   name         = var.name
   pgp_key      = var.pgp_key
   tags         = var.tags
   s3_actions   = [var.allowed_bucket_actions]
-  s3_resources = ["${aws_s3_bucket.default.arn}/*", "${aws_s3_bucket.default.arn}"]
+  s3_resources = ["${join("", aws_s3_bucket.default.*.arn)}/*", join("", aws_s3_bucket.default.*.arn)]
 }
 
 data "aws_iam_policy_document" "bucket_policy" {
@@ -41,7 +57,7 @@ data "aws_iam_policy_document" "bucket_policy" {
     sid       = "DenyIncorrectEncryptionHeader"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.default.id}/*"]
+    resources = ["arn:aws:s3:::${join("", aws_s3_bucket.default.*.id)}/*"]
 
     principals {
       identifiers = ["*"]
@@ -59,7 +75,7 @@ data "aws_iam_policy_document" "bucket_policy" {
     sid       = "DenyUnEncryptedObjectUploads"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${aws_s3_bucket.default.id}/*"]
+    resources = ["arn:aws:s3:::${aws_s3_bucket.default[0].id}/*"]
 
     principals {
       identifiers = ["*"]
@@ -75,8 +91,7 @@ data "aws_iam_policy_document" "bucket_policy" {
 }
 
 resource "aws_s3_bucket_policy" "default" {
-  count  = var.allow_encrypted_uploads_only ? 1 : 0
-  bucket = aws_s3_bucket.default.id
-
+  count  = var.enabled && var.allow_encrypted_uploads_only ? 1 : 0
+  bucket = join("", aws_s3_bucket.default.*.id)
   policy = join("", data.aws_iam_policy_document.bucket_policy.*.json)
 }
