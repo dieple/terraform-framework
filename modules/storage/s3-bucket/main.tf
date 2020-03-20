@@ -41,7 +41,7 @@ resource "aws_s3_bucket" "default" {
 }
 
 module "s3_user" {
-  source       = "git::https://git@github.com/dieple/terraform-framework.git//modules/iam-users-and-accounts/iam-s3-user?ref=tags/v0.0.3"
+  source       = "git::https://git@github.com/dieple/terraform-framework.git//modules/iam-users-and-accounts/iam-s3-user?ref=tags/v0.0.4"
   enabled      = var.enabled && var.user_enabled ? true : false
   name         = var.name
   pgp_key      = var.pgp_key
