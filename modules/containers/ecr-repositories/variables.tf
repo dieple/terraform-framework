@@ -1,5 +1,5 @@
 variable "tags" {
-  type        = map
+  type        = map(string)
   default     = {}
   description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`)"
 }
@@ -17,7 +17,7 @@ variable "allowed_account_ids" {
 }
 
 variable "repo_lifecycle_info" {
-  type        = map
+  type        = map(string)
   description = "expiration days for untagged images, number of images to keep and tag prefixes list for tagged ones for each repository name"
   default     = {}
 }

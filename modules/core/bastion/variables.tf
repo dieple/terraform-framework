@@ -4,7 +4,7 @@ variable "bastion_name" {
 }
 
 variable "tags" {
-  type        = map
+  type        = map(string)
   default     = {}
   description = "Additional tags (e.g. map('BusinessUnit`,`XYZ`)"
 }

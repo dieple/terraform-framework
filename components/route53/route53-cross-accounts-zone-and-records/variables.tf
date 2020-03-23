@@ -1,5 +1,5 @@
-variable "zone_name" {
-  type = string
+variable "zone_names" {
+  type = list(string)
 }
 
 variable "root_share_zone_id" {

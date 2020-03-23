@@ -11,13 +11,15 @@ module "tag_label" {
 }
 
 resource "aws_route53_zone" "default" {
-  name          = var.zone_name
+  count         = length(var.zone_names)
+  name          = element(var.zone_names, count.index)
   tags          = module.tag_label.tags
   force_destroy = true
 }
 
 resource "aws_route53_record" "default" {
-  name            = var.zone_name
+  count           = length(var.zone_names)
+  name            = element(var.zone_names, count.index)
   zone_id         = var.root_share_zone_id
   ttl             = 300
   type            = "NS"
@@ -27,9 +29,9 @@ resource "aws_route53_record" "default" {
   provider =  aws.share_r53_iam_role
 
   records = [
-    aws_route53_zone.default.name_servers[0],
-    aws_route53_zone.default.name_servers[1],
-    aws_route53_zone.default.name_servers[2],
-    aws_route53_zone.default.name_servers[3],
+    aws_route53_zone.default[count.index].name_servers[0],
+    aws_route53_zone.default[count.index].name_servers[1],
+    aws_route53_zone.default[count.index].name_servers[2],
+    aws_route53_zone.default[count.index].name_servers[3],
   ]
 }

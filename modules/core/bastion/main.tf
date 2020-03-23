@@ -79,7 +79,7 @@ data "local_file" "public_key" {
 data "template_file" "bastion_init_script" {
   template = file("${path.module}/user_data/user_data.sh")
 
-  vars {
+  vars = {
     allocation_id = aws_eip.bastion.id
     public_key    = var.public_key_data == "" ? data.local_file.public_key.content : var.public_key_data
     ssh_user      = var.ssh_user
