@@ -150,7 +150,7 @@ resource "aws_launch_configuration" "as_conf" {
 
 resource "aws_autoscaling_group" "bastion_asg" {
   name                      = format("%s-%s", var.bastion_name, "asg")
-  vpc_zone_identifier       = [var.public_subnets]
+  vpc_zone_identifier       = var.public_subnets
   health_check_type         = "EC2"
   launch_configuration      = aws_launch_configuration.as_conf.name
   max_size                  = var.max_size
@@ -160,7 +160,7 @@ resource "aws_autoscaling_group" "bastion_asg" {
   desired_capacity          = var.desired_capacity
   termination_policies      = ["ClosestToNextInstanceHour", "OldestInstance", "Default"]
   enabled_metrics           = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
-  tags                      = [data.null_data_source.tags_as_list_of_maps.*.outputs]
+  tags                      = data.null_data_source.tags_as_list_of_maps.*.outputs
 
   lifecycle {
     create_before_destroy = true
