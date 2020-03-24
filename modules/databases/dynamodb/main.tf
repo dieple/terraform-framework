@@ -107,8 +107,7 @@ resource "aws_dynamodb_table" "default" {
 }
 
 module "dynamodb_autoscaler" {
-//  source = "git::https://github.com/dieple/cloud-native-toolkit.git//terraform-framework.git//modules/dynamodb-autoscaler"
-  source  = "../../../modules/databases/dynamodb-autoscaler"
+  source = "git::https://github.com/dieple/terraform-framework.git//modules/dynamodb-autoscaler?ref=tags/v0.0.5"
 
   enabled                      = var.enabled && var.enable_autoscaler && var.billing_mode == "PROVISIONED"
   name                         = var.name
