@@ -19,3 +19,8 @@ variable "subnets" {
 variable "tags" {
   type = list(string)
 }
+
+variable "bucket" {}
+variable "bucket_region" {}
+variable "dynamodb" {}
+variable "workspace" {}

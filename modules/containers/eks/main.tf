@@ -18,14 +18,25 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+
+  config = {
+    bucket         = var.bucket
+    key            = format("env:/%s/%s/%s", var.workspace, "vpc", "terraform.tfstate")
+    region         = var.bucket_region
+    dynamodb_table = var.dynamodb
+  }
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "8.0.0"
 
   cluster_name              = var.cluster_name
   cluster_enabled_log_types = var.cluster_enabled_log_types
-  vpc_id                    = var.vpc_id
-  subnets                   = var.subnets
+  vpc_id                    = data.terraform_remote_state.vpc.outputs.vpc_id
+  subnets                   = data.terraform_remote_state.vpc.outputs.private_subnets
   enable_irsa               = var.enable_irsa
 
   node_groups_defaults      = {
