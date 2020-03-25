@@ -12,10 +12,7 @@ variable "map_roles" {
 }
 
 variable "cluster_name" {}
-variable "vpc_id" {}
-variable "subnets" {
-  type = list(string)
-}
+
 variable "tags" {
   type = list(string)
 }
