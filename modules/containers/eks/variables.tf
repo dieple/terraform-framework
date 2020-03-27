@@ -14,7 +14,7 @@ variable "map_roles" {
 variable "cluster_name" {}
 
 variable "tags" {
-  type = list(string)
+  type = map(string)
 }
 
 variable "bucket" {}
