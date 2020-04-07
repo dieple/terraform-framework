@@ -3,7 +3,7 @@ provider "tls" {
 }
 
 provider "kubernetes" {
-  version                = "1.10"
+  version                = "~> 1.11"
   host                   = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
@@ -57,7 +57,7 @@ module "tag_label_eks" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "8.0.0"
+  version = "8.2.0"
 
   cluster_name              = module.tag_label_eks.id
   cluster_enabled_log_types = var.cluster_enabled_log_types

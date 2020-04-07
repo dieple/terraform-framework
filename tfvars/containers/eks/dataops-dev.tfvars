@@ -9,7 +9,7 @@ node_groups = {
     min_capacity     = 1
 
     instance_type       = "t2.medium"
-    ami_release_version = "1.14.7-20190927"
+    ami_release_version = "1.14.9-20200228"
     k8s_labels = {
       Environment = "dev"
     }
@@ -20,7 +20,7 @@ node_groups = {
     min_capacity     = 1
 
     instance_type       = "t2.medium"
-    ami_release_version = "1.14.7-20190927"
+    ami_release_version = "1.14.9-20200228"
     k8s_labels = {
       Environment = "dev"
     }

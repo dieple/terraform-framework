@@ -77,3 +77,27 @@ output "worker_autoscaling_policy_arn" {
 output "node_groups" {
   value = module.eks.node_groups
 }
+
+output "workers_asg_arns" {
+  value = module.eks.workers_asg_arns
+}
+
+output "worker_iam_instance_profile_names" {
+  value = module.eks.worker_iam_instance_profile_names
+}
+
+output "workers_launch_template_arns" {
+  value = module.eks.workers_launch_template_arns
+}
+
+output "workers_launch_template_ids" {
+  value = module.eks.workers_launch_template_ids
+}
+
+output "workers_launch_template_latest_versions" {
+  value = module.eks.workers_launch_template_latest_versions
+}
+
+output "workers_user_data" {
+  value = module.eks.workers_user_data
+}
